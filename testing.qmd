@@ -5,14 +5,14 @@ format: html
 editor: visual
 ---
 
-## Learning Objectives 
-1. Using dplyr verbs for efficient data manipulation 
-2. Creating data visualizations with ggplot2
-3. Utilizing functions to organize code 
-4. Use stringr to clean dataframe  
+## Learning Objectives
 
+1.  Using dplyr verbs for efficient data manipulation
+2.  Creating data visualizations with ggplot2
+3.  Utilizing functions to organize code
+4.  Use stringr to clean dataframe
 
-## Dataset 
+## Dataset
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
 
