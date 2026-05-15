@@ -16,4 +16,4 @@ editor: visual
 
 <https://www.kaggle.com/datasets/andrewsundberg/college-basketball-dataset/data>
 
-
+This dataset has data from 2013 to 2026 Division I college basketball seasons. This would work well for our lab assignment because we will try to make the lab narrow down to one college based on different metrics.
