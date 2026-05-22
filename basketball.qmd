@@ -3,6 +3,7 @@ title: "STAT 331/531 Final Project: Checkpoint 3 Progress Report"
 author: "Elaina Chao, Natalie Murai, Nathan Munoz"
 format: html
 editor: visual
+embed-resources: true
 execute:
   echo: true
   warning: false
