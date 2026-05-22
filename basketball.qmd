@@ -1,0 +1,137 @@
+---
+title: "STAT 331/531 Final Project: Checkpoint 3 Progress Report"
+author: "Elaina Chao, Natalie Murai, Nathan Munoz"
+format: html
+editor: visual
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Introduction
+
+In this lab, we will analyze Division I college basketball data from the 2013-2026 seasons. The dataset includes team statistics such as wins, losses, offensive efficiency, defensive efficiency, strength of schedule, and tournament-related performance measures.
+
+The goal of this lab is to practice data wrangling, visualization, and functional programming skills using real sports analytics data. This dataset works well for the lab because it contains multiple years of observations, categorical and numeric variables, opportunities for grouping and summarizing, and enough complexity for writing functions and iteration tasks.
+
+## Dataset Source
+
+College Basketball Dataset from Kaggle: <https://www.kaggle.com/datasets/andrewsundberg/college-basketball-dataset/data>
+
+## Data Dictionary: Selected Variables
+
+| Variable  | Description                                        |
+|-----------|----------------------------------------------------|
+| `TEAM`    | Team name                                          |
+| `CONF`    | Conference                                         |
+| `YEAR`    | Season year                                        |
+| `G`       | Games played                                       |
+| `W`       | Wins                                               |
+| `ADJOE`   | Adjusted offensive efficiency                      |
+| `ADJDE`   | Adjusted defensive efficiency                      |
+| `BARTHAG` | Power rating metric                                |
+| `EFG_O`   | Effective field goal percentage on offense         |
+| `EFG_D`   | Effective field goal percentage allowed on defense |
+| `TOR`     | Turnover rate                                      |
+| `WAB`     | Wins above bubble                                  |
+
+## Learning Goals
+
+This lab is intended to assess the following skills:
+
+1.  Using `dplyr` verbs for efficient data manipulation.
+2.  Creating data visualizations with `ggplot2`.
+3.  Writing functions that take user inputs and return data frame outputs.
+4.  Using string and data-cleaning tools to prepare data for analysis.
+5.  Interpreting statistical graphics and summaries in context.
+
+## Setup
+
+```{r}
+library(tidyverse)
+
+basketball <- read_csv("cbb.csv")
+```
+
+# Lab Questions
+
+## Question 1: Data Wrangling
+
+Create a new dataset containing only teams from the 2024 season.
+
+Then:
+
+1.  Select the variables `TEAM`, `CONF`, `W`, `ADJOE`, and `ADJDE`.
+2.  Arrange the teams from most wins to fewest wins.
+3.  Display the first 10 rows.
+
+### Solution
+
+```{r}
+basketball_2024 <- basketball %>%
+  filter(YEAR == 2024) %>%
+  select(TEAM, CONF, W, ADJOE, ADJDE) %>%
+  arrange(desc(W))
+
+head(basketball_2024, 10)
+```
+
+## Question 2: Visualization
+
+Using the 2024 season data, create a scatterplot showing the relationship between adjusted offensive efficiency (`ADJOE`) and adjusted defensive efficiency (`ADJDE`). Color the points by conference.
+
+Then answer the following questions:
+
+1.  Which teams appear to be strongest overall?
+2.  Do certain conferences appear clustered together?
+
+### Solution
+
+```{r}
+basketball_2024 %>%
+  ggplot(aes(x = ADJOE, y = ADJDE, color = CONF)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Offensive vs. Defensive Efficiency in the 2024 Season",
+    x = "Adjusted Offensive Efficiency",
+    y = "Adjusted Defensive Efficiency",
+    color = "Conference"
+  ) +
+  theme_minimal()
+```
+
+Strong teams generally appear with high offensive efficiency and low defensive efficiency. Some conferences may show visible clustering, suggesting similar performance levels among teams in the same conference.
+
+## Question 3: Functions: Week 7+ Material
+
+Write a function called `top_team()` that:
+
+-   takes a conference name as input,
+-   filters the dataset to the 2024 season,
+-   and returns the team with the highest number of wins in that conference.
+
+Test your function using the `"WCC"` and `"SEC"` conferences.
+
+### Solution
+
+```{r}
+top_team <- function(conf_name) {
+  basketball %>%
+    filter(YEAR == 2024, CONF == conf_name) %>%
+    arrange(desc(W)) %>%
+    slice(1) %>%
+    select(TEAM, CONF, W)
+}
+```
+
+```{r}
+top_team("WCC")
+top_team("SEC")
+```
+
+# Planned Additions for Final Submission
+
+For the final version of the lab, we plan to include simulation-based questions, iteration using `map()`, more advanced visualizations, and challenging multi-step data wrangling problems.
+
+We also plan to add 8--12 total questions, a complete solutions document, and a short written reflection discussing the learning goals and design of the lab.
