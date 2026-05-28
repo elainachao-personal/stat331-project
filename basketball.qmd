@@ -1,5 +1,5 @@
 ---
-title: "STAT 331/531 Final Project: Checkpoint 3 Progress Report"
+title: "STAT 331/531 Final Project: Basketball Analysis Lab"
 author: "Elaina Chao, Natalie Murai, Nathan Munoz"
 format: html
 editor: visual
@@ -46,6 +46,7 @@ This lab is intended to assess the following skills:
 3.  Writing functions that take user inputs and return data frame outputs.
 4.  Using string and data-cleaning tools to prepare data for analysis.
 5.  Interpreting statistical graphics and summaries in context.
+6.  Simulation 
 
 ## Setup
 
@@ -141,7 +142,7 @@ Compare conference performance between the 2013 and 2024 seasons. For each confe
 -   Arrange the table from largest offensive improvement to smallest offensive improvement.
 -   Display the first 10 rows.
 
-::: {.callout-tip}
+::: callout-tip
 The `median()` function will be helpful for finding the typical `ADJOE` and `ADJDE` values for each conference and year.
 
 For offense, higher is better, so use:
@@ -170,8 +171,11 @@ conference_table <- basketball |>
     offense_change = median_offense_2024 - median_offense_2013,
     defense_change = median_defense_2024 - median_defense_2013
   ) |>
-  arrange(desc(offense_change)) |>
-  head(10)
+  arrange(desc(offense_change)) 
+
+conference_table|>
+  head(10)|> 
+  kable()
 ```
 
 ## Question 5: Table Cleaning with KableExtra
@@ -180,14 +184,16 @@ Using the table you created in Question 4, make a cleanly formatted table that d
 
 Your table should:
 
-1. Display the top 10 conferences from Question 4.
-2. Use `kable_styling()` to improve the appearance of the table.
-3. Include a clear title and readable column names.
-4. Clean the values to include only two decimal places.
+1.  Display the top 10 conferences from Question 4.
+2.  Use `kable_styling()` to improve the appearance of the table.
+3.  Include a clear title and readable column names.
+4.  Clean the values to include only two decimal places.
 
 ### Solution
+
 ```{r}
 conference_table |>
+  head(10)|>
   kable(
     caption = "Top 10 Conferences by Offensive Improvement from 2013 to 2024",
     col.names = c(
@@ -205,6 +211,57 @@ conference_table |>
     full_width = FALSE,
     bootstrap_options = "striped"
   )
+```
+
+
+## Question 6: Functions: Week 7+ Material
+
+Write a function called win_ratio(). The function should be able to:
+
+1.  Take a dataframe, team name, and year as input
+2.  Calculate each team's historical win ration (Wins/Games) of that year 
+
+```{r}
+win_ratio <- function(df, team_name, year) { 
+  df |> 
+    filter(TEAM == team_name, YEAR == year) |> 
+    summarize(win_ratio = W / G) |> 
+    pull(win_ratio) 
+}
+```
+
+```{r}
+win_ratio(basketball, "Drake", 2013)
+```
+
+
+
+## Question 7: Functions: Week 7+ Material
+Write a function called simulate_match(). The function should be able to: 
+
+1.  Take 2 TEAM and year as input
+2.  Calculate each team's historical win ration (Wins/Games) of that year
+3.  uses those win ratios to determine the probability that the first inputted Team wins
+4. Simulates one game between the two teams
+5. Returns True/False if the first inputted team won 
+
+```{r}
+simulate_match <- function(df, team1, team2, year) { 
+  team1_ratio <- basketball |> 
+    filter(TEAM == team1, YEAR == year) |> 
+    summarize(win_ratio = W / G) |> 
+    pull(win_ratio) 
+  
+  team2_ratio <- basketball |> 
+    filter(TEAM == team2, YEAR == year) |> 
+    summarize(win_ratio = W / G) |> 
+    pull(win_ratio) 
+  
+  prob_team1 <- team1_ratio / (team1_ratio + team2_ratio) 
+  result <- sample( x = c(TRUE, FALSE), size = 1, prob = c(prob_team1, 1 - prob_team1) )
+  
+  result 
+}
 ```
 
 
