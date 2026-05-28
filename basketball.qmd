@@ -221,6 +221,7 @@ Write a function called win_ratio(). The function should be able to:
 1.  Take a dataframe, team name, and year as input
 2.  Calculate each team's historical win ration (Wins/Games) of that year 
 
+##Solution 
 ```{r}
 win_ratio <- function(df, team_name, year) { 
   df |> 
@@ -235,34 +236,48 @@ win_ratio(basketball, "Drake", 2013)
 ```
 
 
-
 ## Question 7: Functions: Week 7+ Material
 Write a function called simulate_match(). The function should be able to: 
 
-1.  Take 2 TEAM and year as input
-2.  Calculate each team's historical win ration (Wins/Games) of that year
-3.  uses those win ratios to determine the probability that the first inputted Team wins
-4. Simulates one game between the two teams
-5. Returns True/False if the first inputted team won 
+1.  Take a dataframe, 2 TEAM, and year as input
+2.  Use the previous function to calculate each team's historical win ration (Wins/Games) of that year
+3.  Uses those win ratios to determine the probability that the first inputted Team wins
+4.  Simulates one game between the two teams
+5.  Returns True/False if the first inputted team won 
 
+For this function use this Bradley-Terry model. This follows the formula: 
+
+  P(Team 1 Wins) = Team 1 Win Rate/(Team 1 Win Rate + Team 2 Win Rate)
+
+## Solution
 ```{r}
 simulate_match <- function(df, team1, team2, year) { 
-  team1_ratio <- basketball |> 
-    filter(TEAM == team1, YEAR == year) |> 
-    summarize(win_ratio = W / G) |> 
-    pull(win_ratio) 
+  prob_team1 <- win_ratio(df, team1, year)/
+                (win_ratio(df, team1, year) + win_ratio(df, team2, year))
   
-  team2_ratio <- basketball |> 
-    filter(TEAM == team2, YEAR == year) |> 
-    summarize(win_ratio = W / G) |> 
-    pull(win_ratio) 
-  
-  prob_team1 <- team1_ratio / (team1_ratio + team2_ratio) 
   result <- sample( x = c(TRUE, FALSE), size = 1, prob = c(prob_team1, 1 - prob_team1) )
   
   result 
 }
 ```
+
+
+## Question 8: Simulation: Week 7+ Material
+
+Use map_lgl() to simulate 1,000 games between "Connecticut" and "James Madison" during the 2024 season.
+
+## Solution 
+
+```{r}
+results <- map_lgl( .x = 1:1000, 
+                    .f = ~ simulate_match(df = basketball,
+                                          team1 = "Connecticut", 
+                                          team2 = "James Madison", 
+                                          year = 2024 ) )
+
+head(results)
+```
+
 
 
 # Planned Additions for Final Submission
