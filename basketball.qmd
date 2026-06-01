@@ -46,7 +46,7 @@ This lab is intended to assess the following skills:
 3.  Writing functions that take user inputs and return data frame outputs.
 4.  Using string and data-cleaning tools to prepare data for analysis.
 5.  Interpreting statistical graphics and summaries in context.
-6.  Simulation 
+6.  Simulation
 
 ## Setup
 
@@ -59,7 +59,7 @@ basketball <- read_csv("cbb.csv")
 
 # Lab Questions
 
-::: {.callout-tip}
+::: callout-tip
 For questions where you display rows of a data frame, try to only print the rows and columns needed to answer the question.
 :::
 
@@ -93,7 +93,7 @@ Then answer the following questions:
 1.  Which teams appear to be strongest overall?
 2.  Do certain conferences appear clustered together?
 
-::: {.callout-note}
+::: callout-note
 In this dataset, higher `ADJOE` values represent stronger offensive efficiency, while lower `ADJDE` values represent stronger defensive efficiency.
 :::
 
@@ -108,8 +108,7 @@ basketball_2024 |>
     x = "Adjusted Offensive Efficiency",
     y = "Adjusted Defensive Efficiency",
     color = "Conference"
-  ) +
-  theme_minimal()
+  )
 ```
 
 Strong teams generally appear with high offensive efficiency and low defensive efficiency. Some conferences may show visible clustering, suggesting similar performance levels among teams in the same conference.
@@ -124,7 +123,7 @@ Write a function called `top_team()` that:
 
 Test your function using the `"WCC"` and `"SEC"` conferences.
 
-::: {.callout-tip}
+::: callout-tip
 Your function should return the team, conference, and wins.
 :::
 
@@ -135,7 +134,7 @@ top_team <- function(conf_name) {
   basketball |>
     filter(YEAR == 2024, CONF == conf_name) |>
     arrange(desc(W)) |>
-    slice(1) |>
+    slice_max(W) |>
     select(TEAM, CONF, W)
 }
 ```
@@ -152,19 +151,18 @@ Compare conference performance between the 2013 and 2024 seasons. For each confe
 -   Create one row for each conference.
 -   Include columns for 2013 offense, 2024 offense, offense change, 2013 defense, 2024 defense, and defense change.
 -   Arrange the table from largest offensive improvement to smallest offensive improvement.
--   Display the first 10 rows.
+-   Print only the conference name which had the largest offensive improvement.
 
-::: {.callout-tip}
+::: callout-tip
 This will require transforming your data! Sketch out what you want the final table to look like before you begin coding.
 
 You should be starting with the full basketball dataset and ending with one row per conference.
 :::
 
-::: {.callout-tip}
+::: callout-tip
 Use the `median()` function to find the typical `ADJOE` and `ADJDE` values for each conference in each year.
 
-Offensive/defensive changes can be calculated as:
-`median_offense_2024 - median_offense_2013`
+Offensive/defensive changes can be calculated as: `median_offense_2024 - median_offense_2013`
 :::
 
 ### Solution
@@ -181,16 +179,11 @@ conference_table <- basketball |>
     names_from = YEAR,
     values_from = c(median_offense, median_defense)
   ) |>
-  drop_na() |>
   mutate(
     offense_change = median_offense_2024 - median_offense_2013,
     defense_change = median_defense_2024 - median_defense_2013
   ) |>
-  arrange(desc(offense_change)) 
-
-conference_table|>
-  head(10)|> 
-  kable()
+  arrange(offense_change)
 ```
 
 ## Question 5: Table Cleaning with KableExtra
@@ -199,13 +192,15 @@ Using the table you created in Question 4, make a cleanly formatted table that d
 
 Your table should:
 
-1.  Display the top 10 conferences from Question 4.
+1.  Display the top 10 conferences with.
 2.  Use `kable_styling()` to improve the appearance of the table.
 3.  Include a clear title and readable column names.
 4.  Clean the values to include only two decimal places.
 
-::: {.callout-tip}
+::: callout-tip
 You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use `head()`, `kable()`, and `kable_styling()` to format the output.
+
+Hint: You may need to use ungroup() ;)
 :::
 
 ### Solution
@@ -232,17 +227,17 @@ conference_table |>
   )
 ```
 
-
 ## Question 6: Functions: Week 7+ Material
 
 Write a function called `win_ratio()`. The function should be able to:
 
-1. Take a data frame, team name, and year as input.
-2. Filter to that team and year.
-3. Calculate the team’s win ratio using wins divided by games played.
-4. Return only that ratio.
+1.  Take a data frame, team name, and year as input.
+2.  Filter to that team and year.
+3.  Calculate the team’s win ratio using wins divided by games played.
+4.  Return only that ratio.
 
-##Solution 
+##Solution
+
 ```{r}
 win_ratio <- function(df, team_name, year) { 
   df |> 
@@ -258,23 +253,24 @@ win_ratio <- function(df, team_name, year) {
 win_ratio(basketball, "Drake", 2013)
 ```
 
-
 ## Question 7: Functions: Week 7+ Material
+
 Write a function called `simulate_match()`. The function should be able to:
 
-1. Take a data frame, two team names, and a year as input.
-2. Use `win_ratio()` to calculate each team’s win ratio for that year.
-3. Use those win ratios to estimate the probability that the first team wins.
-4. Simulate one game between the two teams.
-5. Return the name of the winning team.
+1.  Take a data frame, two team names, and a year as input.
+2.  Use `win_ratio()` to calculate each team’s win ratio for that year.
+3.  Use those win ratios to estimate the probability that the first team wins.
+4.  Simulate one game between the two teams.
+5.  Return the name of the winning team.
 
-::: {.callout-note}
+::: callout-note
 For this simulation, we are using a simple Bradley-Terry style model. The probability that Team 1 wins is based on Team 1's win ratio compared to the total win ratio of both teams.
 
-  P(Team 1 Wins) = Team 1 Win Ratio/(Team 1 Win Ratio + Team 2 Win Ratio)
+P(Team 1 Wins) = Team 1 Win Ratio/(Team 1 Win Ratio + Team 2 Win Ratio)
 :::
 
 ## Solution
+
 ```{r}
 simulate_match <- function(df, team1, team2, year) { 
   team1_ratio <- win_ratio(df, team1, year)
@@ -292,24 +288,23 @@ simulate_match <- function(df, team1, team2, year) {
 }
 ```
 
-
 ## Question 8: Simulation: Week 7+ Material
 
 Use `map_chr()` to simulate 1,000 games between two teams of your choice during the 2024 season.
 
 Then:
 
-1. Save your results to an object.
-2. Convert the results into a data frame using enframe()
-3. Count how many simulations each team won.
-4. Calculate the proportion of simulations won by each team.
-5. Display your final output using `kable()`
+1.  Save your results to an object.
+2.  Convert the results into a data frame using enframe()
+3.  Count how many simulations each team won.
+4.  Calculate the proportion of simulations won by each team.
+5.  Display your final output using `kable()`
 
-::: {.callout-tip}
+::: callout-tip
 Remember to use set.seed() for reproducibility
 :::
 
-## Solution 
+## Solution
 
 ```{r}
 set.seed(2005)
