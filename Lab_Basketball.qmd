@@ -197,11 +197,11 @@ Using the `conference_table` you created in Question 4, make a cleanly formatted
 Your table should:
 
 1.  Display the top 8 conferences by their median offense in 2024.
-2.  Add an "Improved Offensively?" column. Indicate: 
-      - "Significantly" if the offensive change is greater than or equal to 5. 
-      - "Slightly" if the offensive change is less than 5 but greater than 0. 
-      - "No Change" if the offensive change is equal to 0.
-      - "Got Worse" if the offensive change is less than 0.
+2.  Add an "Improved Offensively?" column. Indicate:
+    -   "Significantly" if the offensive change is greater than or equal to 5.
+    -   "Slightly" if the offensive change is less than 5 but greater than 0.
+    -   "No Change" if the offensive change is equal to 0.
+    -   "Got Worse" if the offensive change is less than 0.
 3.  Use `kable_styling()` to improve the appearance of the table.
 4.  Include a clear title and readable column names.
 5.  Clean the values to include only two decimal places.

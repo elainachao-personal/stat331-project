@@ -10,6 +10,10 @@ execute:
   message: false
 ---
 
+[Download .qmd starter file](Lab_Basketball.qmd)
+
+[Download cbb.csv](cbb.csv)
+
 ## Introduction
 
 In this lab, we will analyze Division I college basketball data from the 2013-2026 seasons. The dataset includes team statistics such as wins, losses, offensive efficiency, defensive efficiency, strength of schedule, and tournament-related performance measures.
