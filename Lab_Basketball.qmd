@@ -121,9 +121,7 @@ west_confs <- c("BSky", "BW", "MWC", "P12", "WAC", "WCC")
 
 ```
 
-Strong teams generally appear with high offensive efficiency and low defensive efficiency. Some conferences may show visible clustering, suggesting similar performance levels among teams in the same conference.
-
-## Question 3: Functions: Week 7+ Material
+## Question 3: Functions
 
 Write a function called `top_team()` that:
 
@@ -154,7 +152,7 @@ top_team("WCC")
 top_team("SEC")
 ```
 
-## Question 4: Data Wrangling
+## Question 4: More Data Wrangling
 
 Compare conference performance between the 2013 and 2024 seasons. For each conference, calculate the median adjusted offensive efficiency and median adjusted defensive efficiency in both years.
 
@@ -197,8 +195,11 @@ Using the conference_table you created in Question 4, make a cleanly formatted t
 
 Your table should:
 
-1.  Display the top 8 conferences by defensive change.
-2.  Add an "Improved Offensively?" column. Indicate: "Significantly" if the offensive change is greater than 5. "Slightly" if the offensive change is less than 5 but greater than 0. "Got Worse" if the offensive change is less than 0.
+1.  Display the top 8 conferences by their median offense in 2024.
+2.  Add an "Improved Offensively?" column. Indicate: 
+      - "Significantly" if the offensive change is greater than 5. 
+      - "Slightly" if the offensive change is less than 5 but greater than 0. 
+      - "Got Worse" if the offensive change is less than 0.
 3.  Use `kable_styling()` to improve the appearance of the table.
 4.  Include a clear title and readable column names.
 5.  Clean the values to include only two decimal places.
@@ -215,7 +216,7 @@ If your table contains NA values, consider adding drop_NA to your data wrangling
 
 ```
 
-## Question 6: Functions: Week 7+ Material
+## Question 6: More Functions
 
 Write a function called `win_ratio()`. The function should be able to:
 
@@ -241,7 +242,7 @@ win_ratio(basketball, "Drake", 2013)
 
 ```
 
-## Question 7: Functions: Week 7+ Material
+## Question 7: Functions with simulation
 
 Write a function called `simulate_match()`. The function should be able to:
 
@@ -254,7 +255,11 @@ Write a function called `simulate_match()`. The function should be able to:
 ::: callout-note
 For this simulation, we are using a simple Bradley-Terry style model. The probability that Team 1 wins is based on Team 1's win ratio compared to the total win ratio of both teams.
 
-P(Team 1 Wins) = Team 1 Win Ratio/(Team 1 Win Ratio + Team 2 Win Ratio)
+$$
+P(\text{Team 1 Wins}) =
+\frac{\text{Team 1 Win Ratio}}
+{\text{Team 1 Win Ratio} + \text{Team 2 Win Ratio}}
+$$
 :::
 
 ```{r}
@@ -263,7 +268,7 @@ P(Team 1 Wins) = Team 1 Win Ratio/(Team 1 Win Ratio + Team 2 Win Ratio)
 
 ```
 
-## Question 8: Simulation: Week 7+ Material
+## Question 8: Simulation with map_chr
 
 Use `map_chr()` to simulate 1,000 games between two teams of your choice during the 2024 season.
 
