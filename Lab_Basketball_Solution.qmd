@@ -122,7 +122,7 @@ basketball_2024 <- basketball_2024 |>
       "West" = west_confs))
 basketball_2024 |>
   ggplot(aes(x = ADJOE, y = ADJDE, color = conference_region)) +
-  geom_point(alpha = 0.7) +
+  geom_point() +
   labs(title = "Offensive vs. Defensive Efficiency in the 2024 Season",
     x = "Adjusted Offensive Efficiency",
     y = "Adjusted Defensive Efficiency",
@@ -131,8 +131,7 @@ basketball_2024 |>
 
 Strong teams generally appear with high offensive efficiency and low defensive efficiency. Some conferences may show visible clustering, suggesting similar performance levels among teams in the same conference.
 
-## Question 3: Functions: Week 7+ Material
-
+## Question 3: Functions
 Write a function called `top_team()` that:
 
 -   takes a conference name as input,
@@ -162,7 +161,7 @@ top_team("WCC")
 top_team("SEC")
 ```
 
-## Question 4: Data Wrangling
+## Question 4: More Data Wrangling
 
 Compare conference performance between the 2013 and 2024 seasons. For each conference, calculate the median adjusted offensive efficiency and median adjusted defensive efficiency in both years.
 
@@ -170,6 +169,7 @@ Compare conference performance between the 2013 and 2024 seasons. For each confe
 -   Include columns for 2013 offense, 2024 offense, offense change, 2013 defense, 2024 defense, and defense change.
 -   Arrange the table from largest offensive improvement to smallest offensive improvement.
 -   Print only the conference name which had the largest offensive improvement.
+-   Save your final table as `conference_table`.
 
 ::: callout-tip
 This will require transforming your data! Sketch out what you want the final table to look like before you begin coding.
@@ -204,10 +204,10 @@ conference_table <- basketball |>
     defense_change = median_defense_2024 - median_defense_2013
   ) |>
   drop_na()|>
-  arrange(offense_change)
+  arrange(desc(offense_change))
 ```
 
-## Print only the conference name which had the largest offensive improvement.
+### Print only the conference name which had the largest offensive improvement.
 
 ```{r}
 conference_table |>
@@ -218,12 +218,21 @@ conference_table |>
 
 ## Question 5: Table Cleaning with KableExtra
 
-Using the conference_table you created in Question 4, make a cleanly formatted table that displays the first 8 rows.
+Using the `conference_table` you created in Question 4, make a cleanly formatted table that displays the top 8 conferences by their median offense in 2024.
 
 Your table should:
 
+<<<<<<< HEAD
 1.  Display the top 8 conferences by defensive change.
 2.  Add an "Improved Offensively?" column. Indicate: "Significantly" if the offensive change is greater than 5. "Slightly" if the offensive change is less than 5 but greater than 0. "Got Worse" if the offensive change is less than 0.
+=======
+1.  Display the top 8 conferences by their median offense in 2024.
+2.  Add an "Improved Offensively?" column. Indicate: 
+      - "Significantly" if the offensive change is greater than or equal to 5. 
+      - "Slightly" if the offensive change is less than 5 but greater than 0.
+      - "No Change" if the offensive change is equal to 0.
+      - "Got Worse" if the offensive change is less than 0.
+>>>>>>> 9c1b8663b3adbab6442205aaeffd5b92f3287b49
 3.  Use `kable_styling()` to improve the appearance of the table.
 4.  Include a clear title and readable column names.
 5.  Clean the values to include only two decimal places.
@@ -231,7 +240,7 @@ Your table should:
 ::: callout-tip
 You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use data manipulation, `kable()`, and `kable_styling()` to format the output.
 
-If your table contains NA values, consider adding drop_NA to your data wrangling in question 4.
+If your table contains NA values, consider adding `drop_na()` to your data wrangling in question 4.
 :::
 
 ### Solution
@@ -244,16 +253,18 @@ conference_table |>
     offensive_improvement = case_when(
       offense_change >= 5 ~ "Significantly",
       offense_change < 5 & offense_change > 0 ~ "Slightly",
+      offense_change == 0 ~ "No Change",
       offense_change < 0 ~ "Got Worse")) |>
  select(
-    CONF,
-    offense_change,
-    offensive_improvement
-    ) |>
+  CONF,
+  median_offense_2024,
+  offense_change,
+  offensive_improvement) |>
   kable(
-    caption = "Top 8 Conferences by Offensive Improvement from 2013 to 2024",
+    caption = "Top 8 Conferences by 2024 Median Offensive Efficiency",
     col.names = c(
       "Conference",
+      "2024 Median Offense",
       "Offense Change",
       "Improved Offensively?"
     ),
@@ -265,7 +276,7 @@ conference_table |>
   )
 ```
 
-## Question 6: Functions: Week 7+ Material
+## Question 6: More Functions
 
 Write a function called `win_ratio()`. The function should be able to:
 
@@ -274,7 +285,7 @@ Write a function called `win_ratio()`. The function should be able to:
 3.  Calculate the team’s win ratio using wins divided by games played.
 4.  Return only that ratio.
 
-##Solution
+### Solution
 
 ```{r}
 win_ratio <- function(df, team_name, year) { 
@@ -285,13 +296,13 @@ win_ratio <- function(df, team_name, year) {
 }
 ```
 
-# Test your function using the following code chunk:
+### Test your function using the following code chunk:
 
 ```{r}
 win_ratio(basketball, "Drake", 2013)
 ```
 
-## Question 7: Functions: Week 7+ Material
+## Question 7: Functions with Simulation
 
 Write a function called `simulate_match()`. The function should be able to:
 
@@ -304,10 +315,14 @@ Write a function called `simulate_match()`. The function should be able to:
 ::: callout-note
 For this simulation, we are using a simple Bradley-Terry style model. The probability that Team 1 wins is based on Team 1's win ratio compared to the total win ratio of both teams.
 
-P(Team 1 Wins) = Team 1 Win Ratio/(Team 1 Win Ratio + Team 2 Win Ratio)
+$$
+P(\text{Team 1 Wins}) =
+\frac{\text{Team 1 Win Ratio}}
+{\text{Team 1 Win Ratio} + \text{Team 2 Win Ratio}}
+$$
 :::
 
-## Solution
+### Solution
 
 ```{r}
 simulate_match <- function(df, team1, team2, year) { 
@@ -326,7 +341,7 @@ simulate_match <- function(df, team1, team2, year) {
 }
 ```
 
-## Question 8: Simulation: Week 7+ Material
+## Question 8: Simulation with map_chr
 
 Use `map_chr()` to simulate 1,000 games between two teams of your choice during the 2024 season.
 
@@ -342,7 +357,7 @@ Then:
 Remember to use set.seed() for reproducibility
 :::
 
-## Solution
+### Solution
 
 ```{r}
 set.seed(2005)
@@ -364,6 +379,4 @@ results |>
     caption = "Simulated Results: Connecticut vs. DePaul",
     col.names = c("Winning Team", "Number of Wins", "Proportion Won")
   )
-
-head(results)
 ```
