@@ -92,11 +92,11 @@ Before making the plot, use `fct_collapse()` to create a new variable called `co
 
 Then:
 
-1. Look at the defined conference regions.
-2. Use `fct_collapse()` to create `conference_region`.
-3. Create a scatterplot with `ADJOE` on the x-axis and `ADJDE` on the y-axis.
-4. Color the points by `conference_region`.
-5. Include a title, axis labels, and a legend label.
+1.  Look at the defined conference regions.
+2.  Use `fct_collapse()` to create `conference_region`.
+3.  Create a scatterplot with `ADJOE` on the x-axis and `ADJDE` on the y-axis.
+4.  Color the points by `conference_region`.
+5.  Include a title, axis labels, and a legend label.
 
 ::: callout-note
 In this dataset, higher `ADJOE` values represent stronger offensive efficiency, while lower `ADJDE` values represent stronger defensive efficiency.
@@ -223,13 +223,10 @@ Using the conference_table you created in Question 4, make a cleanly formatted t
 Your table should:
 
 1.  Display the top 8 conferences by defensive change.
-2.  Add an "Improved Offensively?" column. Indicate:
-      "Significantly" if the offensive change is greater than 5.
-      "Slightly" if the offensive change is less than 5 but greater than 0.
-      "Got Worse" if the offensive change is less than 0.
-2.  Use `kable_styling()` to improve the appearance of the table.
-3.  Include a clear title and readable column names.
-4.  Clean the values to include only two decimal places.
+2.  Add an "Improved Offensively?" column. Indicate: "Significantly" if the offensive change is greater than 5. "Slightly" if the offensive change is less than 5 but greater than 0. "Got Worse" if the offensive change is less than 0.
+3.  Use `kable_styling()` to improve the appearance of the table.
+4.  Include a clear title and readable column names.
+5.  Clean the values to include only two decimal places.
 
 ::: callout-tip
 You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use data manipulation, `kable()`, and `kable_styling()` to format the output.
