@@ -160,6 +160,7 @@ Compare conference performance between the 2013 and 2024 seasons. For each confe
 -   Include columns for 2013 offense, 2024 offense, offense change, 2013 defense, 2024 defense, and defense change.
 -   Arrange the table from largest offensive improvement to smallest offensive improvement.
 -   Print only the conference name which had the largest offensive improvement.
+-   Save your final table as `conference_table`.
 
 ::: callout-tip
 This will require transforming your data! Sketch out what you want the final table to look like before you begin coding.
@@ -181,24 +182,25 @@ Hint: You may need to use ungroup() for your output portion ;)
 
 ```
 
-# Print only the conference name which had the largest offensive improvement.
+### Print only the conference name which had the largest offensive improvement.
 
 ```{r}
 
-# Code for Q4
+# Print largest offensive improvement
 
 ```
 
 ## Question 5: Table Cleaning with KableExtra
 
-Using the conference_table you created in Question 4, make a cleanly formatted table that displays the first 8 rows.
+Using the `conference_table` you created in Question 4, make a cleanly formatted table that displays the top 8 conferences by their median offense in 2024.
 
 Your table should:
 
 1.  Display the top 8 conferences by their median offense in 2024.
 2.  Add an "Improved Offensively?" column. Indicate: 
-      - "Significantly" if the offensive change is greater than 5. 
+      - "Significantly" if the offensive change is greater than or equal to 5. 
       - "Slightly" if the offensive change is less than 5 but greater than 0. 
+      - "No Change" if the offensive change is equal to 0.
       - "Got Worse" if the offensive change is less than 0.
 3.  Use `kable_styling()` to improve the appearance of the table.
 4.  Include a clear title and readable column names.
@@ -207,7 +209,7 @@ Your table should:
 ::: callout-tip
 You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use data manipulation, `kable()`, and `kable_styling()` to format the output.
 
-If your table contains NA values, consider adding drop_NA to your data wrangling in question 4.
+If your table contains NA values, consider adding `drop_na()` to your data wrangling in question 4.
 :::
 
 ```{r}
@@ -235,7 +237,7 @@ win_ratio <- function(df, team_name, year){
 
 ```
 
-# Test your function using the following code chunk:
+### Test your function using the following code chunk:
 
 ```{r}
 win_ratio(basketball, "Drake", 2013)
