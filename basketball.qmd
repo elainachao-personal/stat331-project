@@ -86,12 +86,17 @@ head(basketball_2024, 10)
 
 ## Question 2: Visualization
 
-Using the 2024 season data, create a scatterplot showing the relationship between adjusted offensive efficiency (`ADJOE`) and adjusted defensive efficiency (`ADJDE`). Color the points by conference.
+Using the 2024 season data, create a scatterplot showing the relationship between adjusted offensive efficiency (`ADJOE`) and adjusted defensive efficiency (`ADJDE`).
 
-Then answer the following questions:
+Before making the plot, use `fct_collapse()` to create a new variable called `conference_region` that groups conferences into East, Central, and West regions.
 
-1.  Which teams appear to be strongest overall?
-2.  Do certain conferences appear clustered together?
+Then:
+
+1. Look at the defined conference regions.
+2. Use `fct_collapse()` to create `conference_region`.
+3. Create a scatterplot with `ADJOE` on the x-axis and `ADJDE` on the y-axis.
+4. Color the points by `conference_region`.
+5. Include a title, axis labels, and a legend label.
 
 ::: callout-note
 In this dataset, higher `ADJOE` values represent stronger offensive efficiency, while lower `ADJDE` values represent stronger defensive efficiency.
@@ -100,15 +105,28 @@ In this dataset, higher `ADJOE` values represent stronger offensive efficiency, 
 ### Solution
 
 ```{r}
+east_confs <- c("A10", "ACC", "AE", "Amer", "ASun", "BE", "BSth",
+                "CAA", "Ivy", "MAAC", "MEAC", "NEC", "Pat", "SC", "SEC")
+central_confs <- c("B10", "B12", "CUSA", "Horz", "MAC", "MVC",
+  "OVC", "SB", "Slnd", "Sum", "SWAC", "ind")
+west_confs <- c("BSky", "BW", "MWC", "P12", "WAC", "WCC")
+```
+
+```{r}
+basketball_2024 <- basketball_2024 |>
+  mutate(
+    conference_region = fct_collapse(
+      .f = CONF,
+      "East" = east_confs,
+      "Central" = central_confs,
+      "West" = west_confs))
 basketball_2024 |>
-  ggplot(aes(x = ADJOE, y = ADJDE, color = CONF)) +
+  ggplot(aes(x = ADJOE, y = ADJDE, color = conference_region)) +
   geom_point(alpha = 0.7) +
-  labs(
-    title = "Offensive vs. Defensive Efficiency in the 2024 Season",
+  labs(title = "Offensive vs. Defensive Efficiency in the 2024 Season",
     x = "Adjusted Offensive Efficiency",
     y = "Adjusted Defensive Efficiency",
-    color = "Conference"
-  )
+    color = "Conference Region")
 ```
 
 Strong teams generally appear with high offensive efficiency and low defensive efficiency. Some conferences may show visible clustering, suggesting similar performance levels among teams in the same conference.
@@ -163,6 +181,8 @@ You should be starting with the full basketball dataset and ending with one row 
 Use the `median()` function to find the typical `ADJOE` and `ADJDE` values for each conference in each year.
 
 Offensive/defensive changes can be calculated as: `median_offense_2024 - median_offense_2013`
+
+Hint: You may need to use ungroup() for your output portion ;)
 :::
 
 ### Solution
@@ -183,41 +203,62 @@ conference_table <- basketball |>
     offense_change = median_offense_2024 - median_offense_2013,
     defense_change = median_defense_2024 - median_defense_2013
   ) |>
+  drop_na()|>
   arrange(offense_change)
+```
+
+## Print only the conference name which had the largest offensive improvement.
+
+```{r}
+conference_table |>
+  ungroup() |>
+  slice_max(offense_change) |>
+  pull(CONF)
 ```
 
 ## Question 5: Table Cleaning with KableExtra
 
-Using the table you created in Question 4, make a cleanly formatted table that displays the first 10 rows.
+Using the conference_table you created in Question 4, make a cleanly formatted table that displays the first 8 rows.
 
 Your table should:
 
-1.  Display the top 10 conferences with.
+1.  Display the top 8 conferences by defensive change.
+2.  Add an "Improved Offensively?" column. Indicate:
+      "Significantly" if the offensive change is greater than 5.
+      "Slightly" if the offensive change is less than 5 but greater than 0.
+      "Got Worse" if the offensive change is less than 0.
 2.  Use `kable_styling()` to improve the appearance of the table.
 3.  Include a clear title and readable column names.
 4.  Clean the values to include only two decimal places.
 
 ::: callout-tip
-You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use `head()`, `kable()`, and `kable_styling()` to format the output.
+You should not need to recreate the table from Question 4. Start with your saved `conference_table`, then use data manipulation, `kable()`, and `kable_styling()` to format the output.
 
-Hint: You may need to use ungroup() ;)
+If your table contains NA values, consider adding drop_NA to your data wrangling in question 4.
 :::
 
 ### Solution
 
 ```{r}
 conference_table |>
-  head(10)|>
+  ungroup() |>
+  slice_max(median_offense_2024, n = 8) |>
+  mutate(
+    offensive_improvement = case_when(
+      offense_change >= 5 ~ "Significantly",
+      offense_change < 5 & offense_change > 0 ~ "Slightly",
+      offense_change < 0 ~ "Got Worse")) |>
+ select(
+    CONF,
+    offense_change,
+    offensive_improvement
+    ) |>
   kable(
-    caption = "Top 10 Conferences by Offensive Improvement from 2013 to 2024",
+    caption = "Top 8 Conferences by Offensive Improvement from 2013 to 2024",
     col.names = c(
       "Conference",
-      "2013 Offense",
-      "2024 Offense",
-      "2013 Defense",
-      "2024 Defense",
       "Offense Change",
-      "Defense Change"
+      "Improved Offensively?"
     ),
     digits = 2
   ) |>
