@@ -16,7 +16,7 @@ execute:
 
 [Download .qmd starter file](Lab_Basketball.qmd)
 
-[Download MA_schools.csv](cbb.csv)
+[Download cbb.csv](cbb.csv)
 
 ## Introduction
 
