@@ -1,14 +1,22 @@
 ---
-title: "STAT 331/531 Final Project: Basketball Analysis Lab"
-author: "Elaina Chao, Natalie Murai, Nathan Munoz"
-format: html
-editor: visual
-embed-resources: true
-execute:
+title: "Lab 100: College Basketball Exploration"
+author: ""
+format: 
+  html:
+    code-tools: true
+    toc: true
+    embed-resources: true
+editor: source
+execute: 
+  error: true
   echo: true
-  warning: false
   message: false
+  warning: false
 ---
+
+[Download .qmd starter file](Lab_Basketball.qmd)
+
+[Download MA_schools.csv](cbb.csv)
 
 ## Introduction
 
