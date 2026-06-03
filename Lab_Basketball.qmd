@@ -227,12 +227,17 @@ Write a function called `win_ratio()`. The function should be able to:
 
 # Code for Q6
 
+win_ratio <- function(df, team_name, year){
+  
+}
+
 ```
 
 # Test your function using the following code chunk:
 
 ```{r}
 win_ratio(basketball, "Drake", 2013)
+
 ```
 
 ## Question 7: Functions: Week 7+ Material
