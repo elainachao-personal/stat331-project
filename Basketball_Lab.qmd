@@ -14,7 +14,7 @@ execute:
   warning: false
 ---
 
-[Download .qmd starter file](Lab_Basketball.qmd)
+[Download .qmd starter file](Basketball_Lab.qmd)
 
 [Download cbb.csv](cbb.csv)
 
